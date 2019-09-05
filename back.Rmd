@@ -1,0 +1,80 @@
+---
+output:
+  html_document: default
+params:
+  skill: 1
+---
+<style>
+/* latin */
+@font-face {
+  font-family: 'Calibri';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Calibri'), url(https://fonts.gstatic.com/l/font?kit=J7afnpV-BGlaFfdAhLEY67FIEjg&skey=a1029226f80653a8&v=v10) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@page {
+size: 100mm 150mm;
+}
+body {
+border: black 1mm solid;
+height: 151.5mm;
+width: 101mm;
+font-family: "Calibri";
+}
+.main-container {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+height: 150mm;
+width: 100mm;
+}
+h1 {
+margin-top:5mm;
+margin-bottom: 3mm
+}
+hr{
+margin-top: 3mm;
+margin-bottom: 3mm;
+}
+</style>
+
+```{r,include=FALSE}
+library(tidyverse)
+library(googlesheets)
+library(waffle)
+library(ggtern)
+gs_auth(cache=T)
+sheet <- gs_key("1pVDMAY6-BM22BIzeIHffbtRGcAF7e0lcXcuLlXMom0w")
+card <- gs_read(sheet)[params$skill,]
+```
+
+<div>
+# Possible components
+
+```{r, results='asis', echo = F} 
+card$components %>% 
+  str_split(",") %>% 
+  magrittr::extract2(1) %>% 
+  str_trim() %>% 
+  map_chr(~glue::glue("* {.}")) %>% 
+  glue::glue_collapse("\n")
+```
+</div>
+
+<div>
+<hr>
+</div>
+
+<div>
+# Resources
+
+```{r, results='asis', echo = F} 
+card$resources %>% 
+  str_split(",") %>% 
+  magrittr::extract2(1) %>% 
+  str_trim() %>% 
+  map_chr(~glue::glue("* {.}")) %>% 
+  glue::glue_collapse("\n")
+```
+</div>
